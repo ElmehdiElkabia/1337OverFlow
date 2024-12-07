@@ -1,72 +1,44 @@
 import React from 'react';
-import { Trophy, Users ,Code, Star } from 'lucide-react';
+import { Trophy, Users, Code, Star } from 'lucide-react';
 
 // Community Stat Card Component
 const CommunityStatCard = ({ icon: Icon, title, value, description, bgColor }) => (
-	<div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow">
-		<div className={`w-16 h-16 ${bgColor} rounded-full flex items-center justify-center mb-4`}>
-			<Icon className="text-white" size={32} />
-		</div>
-		<h3 className="text-2xl font-bold text-gray-900 mb-2">{value}</h3>
-		<div>
-			<h4 className="text-lg font-semibold text-gray-700 mb-1">{title}</h4>
-			<p className="text-sm text-gray-500">{description}</p>
-		</div>
+	<div className={`${bgColor} p-4 rounded-lg shadow-md flex flex-col items-center text-white space-y-2`}>
+		<Icon className="text-white" size={32} />
+		<div className="text-3xl font-bold">{value}</div>
+		<div className="text-lg font-semibold">{title}</div>
+		<p className="text-sm text-center opacity-80">{description}</p>
 	</div>
 );
 
-// Top Contributors Component
+// Top Contributor Component
 const TopContributor = ({ name, score, avatar }) => (
-    <div className="flex items-center space-x-4 px-6 py-4 hover:bg-gray-50 transition duration-200 rounded-lg">
-        {/* Avatar */}
-        <img
-            src={avatar || `/api/placeholder/50/50`}
-            alt={name}
-            className="w-12 h-12 rounded-full object-cover border-2 border-orange-500"
-        />
-        {/* Contributor Details */}
-        <div className="flex-1">
-            <h4 className="text-lg font-semibold text-gray-800">{name}</h4>
-            <p className="text-sm text-gray-500">Reputation Score: <span className="font-medium text-gray-700">{score}</span></p>
-        </div>
-        {/* Star Icon */}
-        <div className="flex items-center">
-            <Star size={20} fill="currentColor" className="text-yellow-400" />
-        </div>
-    </div>
+	<div className="flex items-center justify-between p-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+		<div className="flex items-center space-x-3">
+			{/* Avatar Placeholder */}
+			<div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+				{avatar ? (
+					<img src={avatar} alt={name} className="w-full h-full rounded-full" />
+				) : (
+					<span className="text-gray-600">{name.charAt(0)}</span>
+				)}
+			</div>
+			<div>
+				<div className="font-semibold">{name}</div>
+				<div className="text-sm text-gray-600">Reputation Score: {score}</div>
+			</div>
+		</div>
+		<Star size={20} fill="currentColor" className="text-yellow-400" />
+	</div>
 );
 
-
-const CommunitySection1 = () => {
+// Community Section Component
+const CommunitySection = () => {
 	const communityStats = [
-		{
-			icon: Users,
-			title: "Active Users",
-			value: "12.3K",
-			description: "Passionate tech enthusiasts",
-			bgColor: "bg-blue-500"
-		},
-		{
-			icon: Code,
-			title: "Total Questions",
-			value: "45.7K",
-			description: "Coding challenges solved",
-			bgColor: "bg-green-500"
-		},
-		{
-			icon: Trophy,
-			title: "Badges Awarded",
-			value: "23.5K",
-			description: "Community achievements",
-			bgColor: "bg-purple-500"
-		},
-		{
-			icon: Code,
-			title: "Daily Active",
-			value: "3.2K",
-			description: "Solving problems daily",
-			bgColor: "bg-orange-500"
-		}
+		{ icon: Users, title: "Active Users", value: "12.3K", description: "Passionate tech enthusiasts", bgColor: "bg-blue-500" },
+		{ icon: Code, title: "Total Questions", value: "45.7K", description: "Coding challenges solved", bgColor: "bg-green-500" },
+		{ icon: Trophy, title: "Badges Awarded", value: "23.5K", description: "Community achievements", bgColor: "bg-purple-500" },
+		{ icon: Code, title: "Daily Active", value: "3.2K", description: "Solving problems daily", bgColor: "bg-orange-500" }
 	];
 
 	const topContributors = [
@@ -77,45 +49,34 @@ const CommunitySection1 = () => {
 	];
 
 	return (
-		<section className="bg-gray-50 py-16">
-			<div className="container mx-auto px-4">
-				<div className="text-center mb-12">
-					<h2 className="text-3xl font-bold text-gray-900 mb-4">1337 Overflow Community</h2>
-					<p className="text-lg text-gray-600 max-w-2xl mx-auto">
-						Join a vibrant community of developers, problem solvers, and tech enthusiasts pushing the boundaries of coding knowledge.
-					</p>
+		<div className="max-w-6xl mx-auto p-6 rounded-lg ">
+			<h1 className="text-4xl font-bold text-center mb-6 text-gray-800">1337 Overflow Community</h1>
+
+
+			{/* Community Statistics */}
+			<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+				{communityStats.map((stat, index) => (
+					<CommunityStatCard key={index} {...stat} />
+				))}
+			</div>
+
+			{/* Top Contributors Section */}
+			<div className="bg-white p-6 rounded-lg">
+				<div className="flex justify-between items-center mb-6">
+					<h2 className="text-2xl font-semibold text-gray-800">Top Contributors</h2>
+					<button className="text-blue-600 hover:text-blue-800 transition-colors">
+						View All
+					</button>
 				</div>
 
-				{/* Community Statistics */}
-				<div className="grid md:grid-cols-4 gap-6 mb-16">
-					{communityStats.map((stat, index) => (
-						<CommunityStatCard key={index} {...stat} />
+				<div className="space-y-4">
+					{topContributors.map((contributor, index) => (
+						<TopContributor key={index} {...contributor} />
 					))}
 				</div>
-
-				{/* Top Contributors Section */}
-				<div className="bg-white shadow-lg rounded-lg">
-					<div className="p-6 border-b flex justify-between items-center">
-						<h3 className="text-xl font-semibold text-gray-900">Top Contributors</h3>
-						<a
-							href="#"
-							className="text-blue-600 hover:text-blue-800 text-sm"
-						>
-							View All
-						</a>
-					</div>
-					<div>
-						{topContributors.map((contributor, index) => (
-							<TopContributor
-								key={index}
-								{...contributor}
-							/>
-						))}
-					</div>
-				</div>
 			</div>
-		</section>
+		</div>
 	);
 };
 
-export default CommunitySection1;
+export default CommunitySection;
